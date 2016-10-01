@@ -22,7 +22,7 @@ class User(Base):
     self.name = name
 
   def __repr__(self):
-    return 'I\'m a user.'
+    return 'I\'m a user named {0}'.format(self.name)
 
 
 class Address(Base):
@@ -37,15 +37,21 @@ class Address(Base):
   def __init__(self, email):
     self.email = email
 
-#  User.addresses = relationship('Address', back_populates="user")
+  def __repr__(self):
+    return 'I\'m the email address: {0}'.format(self.email)
 
 Base.metadata.create_all(engine)
 
-sample_user = User('Julien')
+sample_user_1 = User('Julien')
 sample_address_1 = Address('julienchurch@gmail.com')
+sample_address_2 = Address('dresdenbirkenau@gmail.com')
+
+sample_user_1.addresses = [sample_address_1, sample_address_2]
+
 
 session = Session()
-session.add(sample_user)
+session.add(sample_user_1)
 session.commit()
 
 julien = session.query(User).filter_by(name='Julien').one()
+julien_addr = session.query(Address).filter_by(email='julienchurch@gmail.com').one()
