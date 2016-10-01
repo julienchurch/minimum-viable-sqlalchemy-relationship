@@ -31,7 +31,10 @@ class Address(Base):
   id = Column(Integer, primary_key=True)
   email = Column(String, nullable=False)
 
+  # The user_id field just creates the FOREIGN KEY in the SQL, while...
   user_id = Column(Integer, ForeignKey('users.id'))
+  # The relationship field is an SQLAlchemy ORM construct for querying the
+  # objects we're working with easily
   user = relationship('User', back_populates='addresses')
 
   def __init__(self, email):
